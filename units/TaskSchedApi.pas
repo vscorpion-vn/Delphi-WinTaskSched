@@ -55,7 +55,7 @@ unit TaskSchedApi;
 
 interface
 
-uses Winapi.Windows, System.Classes, System.Variants, Winapi.ActiveX;
+uses Windows, Classes, Variants, ActiveX;
   
 const
 //
@@ -636,17 +636,17 @@ type
     ['{8CFAC062-A080-4C15-9A88-AA7C2AF80DFC}']
     property Name: WideString readonly dispid 1;
     property Path: WideString readonly dispid 0;
-    function GetFolder(const Path: WideString): ITaskFolder; dispid 3;
+    function GetFolder(const APath: WideString): ITaskFolder; dispid 3;
     function GetFolders(flags: Integer): ITaskFolderCollection; dispid 4;
     function CreateFolder(const subFolderName: WideString; sddl: OleVariant): ITaskFolder; dispid 5;
     procedure DeleteFolder(const subFolderName: WideString; flags: Integer); dispid 6;
-    function GetTask(const Path: WideString): IRegisteredTask; dispid 7;
+    function GetTask(const APath: WideString): IRegisteredTask; dispid 7;
     function GetTasks(flags: Integer): IRegisteredTaskCollection; dispid 8;
-    procedure DeleteTask(const Name: WideString; flags: Integer); dispid 9;
-    function RegisterTask(const Path: WideString; const XmlText: WideString; flags: Integer; 
+    procedure DeleteTask(const AName: WideString; flags: Integer); dispid 9;
+    function RegisterTask(const APath: WideString; const XmlText: WideString; flags: Integer; 
                           UserId: OleVariant; password: OleVariant; LogonType: _TASK_LOGON_TYPE; 
                           sddl: OleVariant): IRegisteredTask; dispid 10;
-    function RegisterTaskDefinition(const Path: WideString; const pDefinition: ITaskDefinition; 
+    function RegisterTaskDefinition(const APath: WideString; const pDefinition: ITaskDefinition; 
                                     flags: Integer; UserId: OleVariant; password: OleVariant; 
                                     LogonType: _TASK_LOGON_TYPE; sddl: OleVariant): IRegisteredTask; dispid 11;
     function GetSecurityDescriptor(securityInformation: Integer): WideString; dispid 12;
@@ -2155,7 +2155,7 @@ type
 
 implementation
 
-uses System.Win.ComObj;
+uses ComObj;
 
 class function CoTaskScheduler_.Create: ITaskService;
 begin
