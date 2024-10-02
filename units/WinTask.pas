@@ -26,7 +26,7 @@ unit WinTask;
 interface
 
 uses
-  Winapi.Windows, System.Classes, System.Contnrs, TaskSchedApi;
+  Windows, Classes, Contnrs, TaskSchedApi;
 
 const
   BitMask : array [1..16] of word = (1,2,4,8,$10,$20,$40,$80,$100,$200,$400,$800,
@@ -204,7 +204,7 @@ type
     function GetTriggerTypeAsString : string;
     function GetTriggerString : String;
   public
-    constructor Create (Collection: TCollection);
+    constructor Create (ACollection: TCollection);
     destructor Destroy; override;
     procedure SetTaskTrigger(const Value: ITrigger);
     procedure SetToDefault(const AUserId : string);
@@ -519,8 +519,8 @@ function CreateWinTaskScheduler (var TaskSchedule : TWinTaskScheduler) : HResult
 
 implementation
 
-uses System.SysUtils, System.Win.ComObj, System.DateUtils, System.Math, System.StrUtils,
-  Winapi.ActiveX, Winapi.WinSvc, System.Variants, WinTaskConsts;
+uses SysUtils, ComObj, DateUtils, Math, StrUtils,
+  ActiveX, (*Winapi.WinSvc*) jwawinsvc, Variants, WinTaskConsts;
 
 var
   TaskStateNames : array[TWinTaskStatus] of pointer =
@@ -701,7 +701,8 @@ begin
   else begin
     Result:=FormatDateTime('yyyy-mm-dd"T"hh:nn:ss',Value);
     if UseTimeZone then begin
-      m:=TTimeZone.Local.UtcOffset.TotalMinutes;
+      //m:=TTimeZone.Local.UtcOffset.TotalMinutes;
+      m:= GetLocalTimeOffset;
       if IsZero(m) then Result:=Result+'Z'
       else begin
         if m<0 then Result:=Result+'-' else Result:=Result+'+';
@@ -975,7 +976,7 @@ begin
   end;
 
 {------------------------------------------------------------------- }
-constructor TWinTaskTrigger.Create (Collection: TCollection);
+constructor TWinTaskTrigger.Create (ACollection: TCollection);
 begin
   inherited Create(Collection);
   FTimeZone:=false; FTimeOffset:=0;
@@ -1442,7 +1443,7 @@ begin
 
 function TWinTaskTriggers.Add (ATrigger: ITrigger): TWinTaskTrigger;
 begin
-  Result:=TWinTaskTrigger(Add);
+  Result:= TWinTaskTrigger(inherited Add);
   Result.SetTaskTrigger(ATrigger);
   end;
 
